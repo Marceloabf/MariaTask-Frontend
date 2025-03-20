@@ -1,0 +1,29 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { ITask } from '../../features/tasks/interfaces/task.interface';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class TaskService {
+    private apiUrl = 'http://localhost:3000/tasks';
+  
+    constructor(private http: HttpClient) {}
+  
+    getTasks(userId: number): Observable<ITask[]> {
+      return this.http.get<ITask[]>(this.apiUrl, {params:{userId}});
+    }
+  
+    createTask(task: ITask): Observable<ITask> {
+      return this.http.post<ITask>(this.apiUrl, task);
+    }
+  
+    updateTask(id: number, task: ITask): Observable<ITask> {
+      return this.http.put<ITask>(`${this.apiUrl}/${id}`, task);
+    }
+  
+    deleteTask(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
+  }

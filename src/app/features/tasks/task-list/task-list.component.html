@@ -1,0 +1,43 @@
+<div class="container mt-5">
+
+  <div class="text-center mb-4">
+    <h1>Lista de Tarefas</h1>
+    <p class="lead">Gerencie as tarefas de forma simples e rápida</p>
+  </div>
+
+  <div *ngIf="loading" class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Carregando...</span>
+  </div>
+
+  <div class="table-responsive table-container p-4 rounded" *ngIf="!loading">
+    <table #taskTable class="table table-primary table-bordered table-hover">
+      <thead class="thead-dark">
+        <tr>
+          <th>Título</th>
+          <th>Descrição</th>
+          <th>Prazo</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>{{ task.title }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.dueDate }}</td>
+          <td>
+            <span
+              class="badge badge-success"
+              [ngClass]="{
+                'text-bg-success': task.status === 'DONE',
+                'text-bg-warning': task.status === 'IN_PROGRESS',
+                'text-bg-danger': task.status === 'PENDING'
+              }"
+            >
+              {{ task.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

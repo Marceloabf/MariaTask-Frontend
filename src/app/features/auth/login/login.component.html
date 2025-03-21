@@ -5,41 +5,39 @@
           <div class="card-header bg-primary text-white text-center">
             <h3>Login</h3>
           </div>
-          <div class="card-body">
-            <form (ngSubmit)="onSubmit()">
-              <div class="mb-3">
-                <label for="username" class="form-label">Usuário</label>
-                <input
-                  type="text"
-                  id="username"
-                  class="form-control"
-                  [(ngModel)]="user.email"
-                  name="username"
-                  required
-                  placeholder="Digite seu usuário"
-                />
-              </div>
-              <div class="mb-3">
-                <label for="password" class="form-label">Senha</label>
-                <input
-                  type="password"
-                  id="password"
-                  class="form-control"
-                  [(ngModel)]="user.password"
-                  name="password"
-                  required
-                  placeholder="Digite sua senha"
-                />
-              </div>
-              <div class="mb-3 text-center">
-                <button type="submit" class="btn btn-primary w-100">Entrar</button>
-              </div>
-              <div *ngIf="loginError" class="alert alert-danger text-center">
-                {{ loginError }}
-              </div>
-            </form>
-          </div>
+          <div class="container">
+            <div class="row align-items-center py-5">
+                <div class="col-md-5 d-flex flex-column align-items-center gap-3">
+                  <p-floatlabel variant="on" class="w-100">
+                    <input pInputText id="email" [(ngModel)]="user.email" autocomplete="off" />
+                    <label for="on_label">Email</label>
+                  </p-floatlabel>
+                  <p-floatlabel variant="on" class="w-100">
+                    <p-password [(ngModel)]="user.password" promptLabel="Choose a password" weakLabel="Fraca" mediumLabel="Media" strongLabel="Forte" />
+                  <label for="on_label">Senha</label>
+                  </p-floatlabel>
+                    <p-button label="Login" icon="pi pi-user" class="w-100" (onClick)="login()"></p-button>
+                </div>
+        
+                <div class="col-md-5 d-flex flex-column align-items-center gap-3">
+                  <p-floatlabel variant="on" class="w-100">
+                    <input pInputText id="name" [(ngModel)]="newUser.name" autocomplete="off" />
+                    <label for="on_label">Nome</label>
+                  </p-floatlabel>
+                  <p-floatlabel variant="on" class="w-100">
+                    <input pInputText id="email" [(ngModel)]="newUser.email" autocomplete="off" />
+                    <label for="on_label">Email</label>
+                  </p-floatlabel>
+                  <p-floatlabel variant="on" class="w-100">
+                    <p-password [(ngModel)]="newUser.password" promptLabel="Choose a password" weakLabel="Fraca" mediumLabel="Media" strongLabel="Forte" />
+                  <label for="on_label">Senha</label>
+                  </p-floatlabel>
+                    <p-button label="Sign Up" icon="pi pi-user-plus" severity="success" class="w-100" (onClick)="register()"></p-button>
+                </div>
+            </div>
+        </div>
         </div>
       </div>
     </div>
   </div>
+  <p-toast />

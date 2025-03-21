@@ -20,6 +20,10 @@ export class AuthService {
     localStorage.removeItem('user');
   }
 
+  register(user: IUser){
+    return this.http.post<ILoginUser>(`${this.apiUrl}/register`, user)
+  }
+
   setUserId(userId: number){
     this.userId = userId
   }
@@ -27,11 +31,5 @@ export class AuthService {
   getUserId(){
     if(!this.userId) return;
     return this.userId
-  }
-
-  private handleError(error: any) {
-    // Aqui você pode lidar com erros (mostrar mensagens de erro, etc.)
-    console.error(error);
-    throw error;
   }
 }

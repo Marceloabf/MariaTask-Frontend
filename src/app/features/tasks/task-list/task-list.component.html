@@ -5,39 +5,41 @@
     <p class="lead">Gerencie as tarefas de forma simples e rápida</p>
   </div>
 
-  <div *ngIf="loading" class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Carregando...</span>
+  <div class="table-responsive table-container p-4 rounded">
+    <p-button icon="pi pi-plus" [rounded]="true" [text]="true" [raised]="true" (onClick)="toggleDialog()"/>
+    <p-table [value]="tasks" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template #header>
+          <tr>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Prazo</th>
+              <th>Status</th>
+          </tr>
+      </ng-template>
+      <ng-template #body let-task>
+          <tr>
+              <td>{{ task.title }}</td>
+              <td>{{ task.description }}</td>
+              <td>{{ task.dueDate | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+              <td>{{ task.status }}</td>
+          </tr>
+      </ng-template>
+  </p-table>
   </div>
 
-  <div class="table-responsive table-container p-4 rounded" *ngIf="!loading">
-    <table #taskTable class="table table-primary table-bordered table-hover">
-      <thead class="thead-dark">
-        <tr>
-          <th>Título</th>
-          <th>Descrição</th>
-          <th>Prazo</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of tasks">
-          <td>{{ task.title }}</td>
-          <td>{{ task.description }}</td>
-          <td>{{ task.dueDate }}</td>
-          <td>
-            <span
-              class="badge badge-success"
-              [ngClass]="{
-                'text-bg-success': task.status === 'DONE',
-                'text-bg-warning': task.status === 'IN_PROGRESS',
-                'text-bg-danger': task.status === 'PENDING'
-              }"
-            >
-              {{ task.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <p-dialog header="Criar atividade" [modal]="true" [(visible)]="visibleDialog" [style]="{ width: '25rem' }">
+    <span class="p-text-secondary block mb-8">Update your information.</span>
+    <div class="flex items-center gap-4 mb-4">
+        <label for="username" class="font-semibold w-24">Username</label>
+        <input pInputText id="username" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex items-center gap-4 mb-8">
+        <label for="email" class="font-semibold w-24">Email</label>
+        <input pInputText id="email" class="flex-auto" autocomplete="off" />
+    </div>
+    <div class="flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" (click)="visibleDialog = false" />
+        <p-button label="Save" (click)="visibleDialog = false" />
+    </div>
+</p-dialog>
 </div>

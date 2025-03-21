@@ -5,11 +5,14 @@ import { CommonModule } from '@angular/common';
 import { TaskService } from '../../../core/services/task.service';
 import { ITask } from '../interfaces/task.interface';
 import { AuthService } from '../../../core/services/auth.service';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TableModule, ButtonModule, DialogModule],
   templateUrl: './task-list.component.html',
   styleUrl: './task-list.component.scss'
 })
@@ -19,19 +22,14 @@ export class TaskListComponent implements OnInit {
 
   tasks: ITask[] = []
   loading: boolean = false;
+  visibleDialog: boolean = false;
   private userId: number | undefined = undefined
-  private isDataTableInitialized = false;
-  constructor(private taskService: TaskService, private authService: AuthService, private cdr: ChangeDetectorRef){
+  constructor(private taskService: TaskService, private authService: AuthService){
   }
 
   ngOnInit(): void {
     this.getUserId();
     this.getUserTasks();
-  }
-
-  ngAfterViewInit() {
-    // DataTable será inicializada após os dados estarem prontos
-    this.initDataTable();
   }
 
   getUserId() {
@@ -44,44 +42,18 @@ export class TaskListComponent implements OnInit {
     this.taskService.getTasks(this.userId).subscribe({
       next: (response) => {
         this.tasks = response ?? [];
-        this.loading = false; // Desativa o loading quando os dados estiverem prontos
-        this.cdr.detectChanges(); // Garante que a tabela será renderizada com os novos dados
-        this.refreshDataTable(); // Atualiza a DataTable
+        this.loading = false; 
+        console.log(this.tasks)
       },
       error: (error: Error) => {
         console.error('Erro ao buscar tarefas do usuário:', error);
-        this.loading = false; // Mesmo no erro, desativa o loading
+        this.loading = false; 
       }
     });
   }
 
-  initDataTable() {
-    $(this.table.nativeElement).DataTable({
-      paging: true,
-      processing: true,
-      pageLength: 10,
-      searching: true,
-      ordering: true,
-      info: true,
-      lengthChange: true,
-      autoWidth: false,
-      language: {
-        search: "Pesquisar:",
-        lengthMenu: " _MENU_ registros por página",
-        info: "_TOTAL_ registros",
-        infoEmpty: "Nenhum registro disponível",
-        zeroRecords: "Nenhum registro encontrado",
-        paginate: {
-          previous: "Anterior",
-          next: "Próximo"
-        }
-      }
-    });
-  }
-
-  refreshDataTable() {
-    if ($.fn.DataTable.isDataTable(this.table.nativeElement)) {
-      $(this.table.nativeElement).DataTable().clear().rows.add(this.tasks).draw(); 
-    }
+  toggleDialog(){
+    this.visibleDialog = !this.visibleDialog
+    console.log(this.visibleDialog)
   }
 }

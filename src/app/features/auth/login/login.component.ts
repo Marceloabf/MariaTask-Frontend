@@ -10,11 +10,12 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, DividerModule, InputTextModule, FloatLabelModule, PasswordModule, ToastModule],
+  imports: [CommonModule, FormsModule, ButtonModule, DividerModule, InputTextModule, FloatLabelModule, PasswordModule, ToastModule, DialogModule],
   providers: [MessageService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -30,6 +31,7 @@ export class LoginComponent {
     password: '',
   }
   loginError: string = '';
+  visibleDialog: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {}
 
@@ -38,8 +40,8 @@ export class LoginComponent {
       this.authService.login(this.user).subscribe({
         next: (response) => {
           sessionStorage.setItem('access-token', response.access_token);
+          sessionStorage.setItem('user-id', JSON.stringify(response.userId));
           this.router.navigate(['/tasks']);
-          this.authService.setUserId(response.userId)
         },
         error: (error: Error) => {
           console.error('Erro ao logar:', error)
@@ -60,5 +62,10 @@ export class LoginComponent {
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao criar usuário' })
       }
     })
+  }
+
+  toggleDialog(){
+    this.visibleDialog = !this.visibleDialog
+    console.log(this.visibleDialog)
   }
 }

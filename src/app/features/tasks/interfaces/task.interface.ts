@@ -1,9 +1,9 @@
 export interface ITask{
-    id: string;
+    // id: string;
     title: string;
     description: string;
-    status: 'PENDING' | 'IN_PROGRESS' | 'DONE';
-    createdAt: Date;
-    dueDate: Date;
-    userId: number;
+    status: string;
+    // createdAt: Date;
+    dueDate: string;
+    // userId: number;
 }

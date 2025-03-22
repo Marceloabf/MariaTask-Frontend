@@ -1,43 +1,153 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row w-100">
-      <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
-        <div class="card shadow">
-          <div class="card-header bg-primary text-white text-center">
-            <h3>Login</h3>
-          </div>
-          <div class="container">
-            <div class="row align-items-center py-5">
-                <div class="col-md-5 d-flex flex-column align-items-center gap-3">
-                  <p-floatlabel variant="on" class="w-100">
-                    <input pInputText id="email" [(ngModel)]="user.email" autocomplete="off" />
-                    <label for="on_label">Email</label>
-                  </p-floatlabel>
-                  <p-floatlabel variant="on" class="w-100">
-                    <p-password [(ngModel)]="user.password" promptLabel="Choose a password" weakLabel="Fraca" mediumLabel="Media" strongLabel="Forte" />
-                  <label for="on_label">Senha</label>
-                  </p-floatlabel>
-                    <p-button label="Login" icon="pi pi-user" class="w-100" (onClick)="login()"></p-button>
-                </div>
-        
-                <div class="col-md-5 d-flex flex-column align-items-center gap-3">
-                  <p-floatlabel variant="on" class="w-100">
-                    <input pInputText id="name" [(ngModel)]="newUser.name" autocomplete="off" />
-                    <label for="on_label">Nome</label>
-                  </p-floatlabel>
-                  <p-floatlabel variant="on" class="w-100">
-                    <input pInputText id="email" [(ngModel)]="newUser.email" autocomplete="off" />
-                    <label for="on_label">Email</label>
-                  </p-floatlabel>
-                  <p-floatlabel variant="on" class="w-100">
-                    <p-password [(ngModel)]="newUser.password" promptLabel="Choose a password" weakLabel="Fraca" mediumLabel="Media" strongLabel="Forte" />
-                  <label for="on_label">Senha</label>
-                  </p-floatlabel>
-                    <p-button label="Sign Up" icon="pi pi-user-plus" severity="success" class="w-100" (onClick)="register()"></p-button>
-                </div>
-            </div>
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <div class="row w-100">
+    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white text-center">
+          <h3>Login</h3>
         </div>
+        <div class="container">
+          <div class="row align-items-center py-5">
+            <div class="col-md-5 d-flex flex-column align-items-center gap-3">
+              <p-floatlabel variant="on" class="w-100">
+                <input
+                  pInputText
+                  id="email"
+                  [(ngModel)]="user.email"
+                  autocomplete="off"
+                />
+                <label for="on_label">Email</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-100">
+                <p-password
+                  [(ngModel)]="user.password"
+                  promptLabel="Choose a password"
+                  weakLabel="Fraca"
+                  mediumLabel="Media"
+                  strongLabel="Forte"
+                  [toggleMask]="true"
+                />
+                <label for="on_label">Senha</label>
+              </p-floatlabel>
+              <p-button
+                label="Login"
+                icon="pi pi-user"
+                class="w-100"
+                (onClick)="login()"
+              ></p-button>
+            </div>
+
+            <div class="col-md-5 d-flex flex-column align-items-center gap-3">
+              <p-floatlabel variant="on" class="w-100">
+                <input
+                  pInputText
+                  id="name"
+                  [(ngModel)]="newUser.name"
+                  autocomplete="off"
+                />
+                <label for="on_label">Nome</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-100">
+                <input
+                  pInputText
+                  id="email"
+                  [(ngModel)]="newUser.email"
+                  autocomplete="off"
+                />
+                <label for="on_label">Email</label>
+              </p-floatlabel>
+              <p-floatlabel variant="on" class="w-100">
+                <p-password
+                  [(ngModel)]="newUser.password"
+                  promptLabel="Choose a password"
+                  weakLabel="Fraca"
+                  mediumLabel="Media"
+                  strongLabel="Forte"
+                />
+                <label for="on_label">Senha</label>
+              </p-floatlabel>
+              <p-button
+                label="Sign Up"
+                icon="pi pi-user-plus"
+                severity="success"
+                class="w-100"
+                (onClick)="register()"
+              ></p-button>
+            </div>
+
+            <!-- <p-button (click)="toggleDialog()" icon="pi pi-user" label="Login" />
+            <p-dialog
+              maskStyleClass="backdrop-blur-sm"
+              [(visible)]="visibleDialog"
+              styleClass="!border-0 !bg-transparent"
+            >
+              <ng-template #headless>
+                <div
+                  class="flex flex-col px-8 py-8 gap-6 rounded-2xl"
+                  style="
+                    border-radius: 12px;
+                    background-image: radial-gradient(
+                      circle at left top,
+                      var(--p-primary-400),
+                      var(--p-primary-700)
+                    );
+                  "
+                >
+                  <svg
+                    width="31"
+                    height="33"
+                    viewBox="0 0 31 33"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="block mx-auto"
+                  >
+                    <path d="..." fill="var(--p-primary-color)" />
+                  </svg>
+                  <div class="inline-flex flex-col gap-2">
+                    <label for="username" class="text-primary-50 font-semibold"
+                      >Username</label
+                    >
+                    <input
+                      pInputText
+                      id="username"
+                      class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                    />
+                  </div>
+                  <div class="inline-flex flex-col gap-2">
+                    <label for="password" class="text-primary-50 font-semibold"
+                      >Password</label
+                    >
+                    <input
+                      pInputText
+                      id="password"
+                      class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80"
+                      type="password"
+                    />
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <p-button
+                      label="Cancel"
+                      (onClick)="toggleDialog()"
+                      [text]="true"
+                      styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+                      class="w-full"
+                    />
+                    <p-button
+                      label="Sign-In"
+                      (click)="toggleDialog()"
+                      [text]="true"
+                      styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10"
+                      class="w-full"
+                    />
+                  </div>
+                </div>
+              </ng-template>
+            </p-dialog> -->
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <p-toast />
+</div>
+<p-toast />

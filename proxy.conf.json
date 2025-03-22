@@ -1,0 +1,10 @@
+{
+    "/api/quotes": {
+      "target": "https://zenquotes.io",
+      "secure": false,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/api/quotes": "/api/random"
+      }
+    }
+  }

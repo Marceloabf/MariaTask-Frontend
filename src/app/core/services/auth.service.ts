@@ -8,7 +8,6 @@ import { ILoginUser, IUser } from '../../features/auth/interfaces/user.interface
 })
 export class AuthService {
   private apiUrl = 'http://localhost:3000/auth';
-  userId: number  = 0;
 
   constructor(private http: HttpClient) {}
 
@@ -24,12 +23,8 @@ export class AuthService {
     return this.http.post<ILoginUser>(`${this.apiUrl}/register`, user)
   }
 
-  setUserId(userId: number){
-    this.userId = userId
-  }
-
   getUserId(){
-    if(!this.userId) return;
-    return this.userId
+    const userId = JSON.parse(sessionStorage.getItem('user-id')!)
+    return userId;
   }
 }

@@ -1,5 +1,19 @@
-.table-container{
-    background: #cfe2ff;
-    max-height: 700px;
-    overflow: visible;
+.table-container {
+  background: #cfe2ff;
+  min-height: 700px;
+  overflow: auto;
+}
+
+.description-column {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.action-column {
+  min-width: 190px;
+}
+
+.status-column{
+  min-width: 130px;
 }

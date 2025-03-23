@@ -2,104 +2,120 @@
   class="container d-flex justify-content-center align-items-center min-vh-100"
 >
   <div class="row w-100">
-    <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
-      <div class="card shadow task-container">
+    <div class="col-6 mx-auto d-flex justify-content-center">
+      <div class="card shadow main-container">
         <div class="card-header text-white text-center card-header-bg">
-          <h3>Login</h3>
+          <h3>WELCOME</h3>
         </div>
         <div class="container">
           <div class="row align-items-center py-5">
             @if(!isRegister){
-              <div class="col-md-12 d-flex flex-column align-items-center justify-content-center gap-3">
-                <div class="col-md-5">
-                  <p-floatlabel variant="on" class="w-85">
+            <div
+              class="col-md-12 d-flex flex-column align-items-center justify-content-center gap-4"
+            >
+              <div class="col-md-5 d-flex flex-column gap-2 login-container">
+                <div>
+                  <p-floatlabel variant="on">
                     <input
                       pInputText
                       id="email"
                       [(ngModel)]="user.email"
                       autocomplete="off"
-                      class="email"
+                      class="input-mask-fix"
                     />
                     <label for="on_label">Email</label>
                   </p-floatlabel>
                 </div>
-                <div class="col-md-5">
+                <div>
                   <p-floatlabel variant="on">
                     <p-password
                       [(ngModel)]="user.password"
                       promptLabel="Choose a password"
-                      weakLabel="Fraca"
-                      mediumLabel="Media"
-                      strongLabel="Forte"
                       [toggleMask]="true"
+                      [feedback]="false"
                     />
-                    <label for="on_label">Senha</label>
+                    <label for="on_label">Password</label>
                   </p-floatlabel>
                 </div>
-                <div class="col-md-5 d-flex justify-content-between">
+                <div
+                  class="d-flex w-100 justify-content-between button-container mt-4"
+                >
                   <p-button
-                    label="Login"
-                    icon="pi pi-user"
-                    class="w-100"
+                    [label]="isLoadingLogin ? 'Logging in' : 'Login'"
                     (onClick)="login()"
                   ></p-button>
                   <p-button
                     label="Register"
-                    icon="pi pi-user-plus"
-                    class="w-100"
                     (onClick)="toggleRegister()"
                   ></p-button>
                 </div>
               </div>
-            }
-
-            @if (isRegister) {
-              <div class="col-md-12 d-flex flex-column align-items-center justify-content-center gap-3">
-                <div class="col-md-5">
+            </div>
+            } @if (isRegister) {
+            <div
+              class="col-md-12 d-flex flex-column align-items-center justify-content-center gap-4 register"
+            >
+              <div class="col-md-5 d-flex flex-column gap-2 login-container">
+                <div>
                   <p-floatlabel variant="on" class="w-100">
                     <input
                       pInputText
                       id="name"
                       [(ngModel)]="newUser.name"
                       autocomplete="off"
+                      class="input-mask-fix"
                     />
                     <label for="on_label">Nome</label>
                   </p-floatlabel>
                 </div>
-                <div class="col-md-5">
+                <div>
                   <p-floatlabel variant="on" class="w-100">
                     <input
                       pInputText
                       id="email"
                       [(ngModel)]="newUser.email"
                       autocomplete="off"
+                      class="input-mask-fix"
                     />
                     <label for="on_label">Email</label>
                   </p-floatlabel>
                 </div>
-                <div class="col-md-5">
+                <div>
                   <p-floatlabel variant="on" class="w-100">
                     <p-password
                       [(ngModel)]="newUser.password"
                       promptLabel="Choose a password"
-                      weakLabel="Fraca"
-                      mediumLabel="Media"
-                      strongLabel="Forte"
+                      weakLabel="Weak"
+                      mediumLabel="Medium"
+                      strongLabel="Strong"
+                      [toggleMask]="true"
                     />
-                    <label for="on_label">Senha</label>
+                    <label for="on_label">Password</label>
                   </p-floatlabel>
                 </div>
-                <div class="col-md-5 d-flex justify-content-center">
+                <div>
+                  <p-floatlabel variant="on" class="w-100">
+                    <p-password
+                      [(ngModel)]="newUser.passwordClone"
+                      promptLabel="Confirm password"
+                      [toggleMask]="true"
+                    />
+                    <label for="on_label">Confirm Password</label>
+                  </p-floatlabel>
+                </div>
+                <div class="d-flex w-100 justify-content-between register-button-container mt-4">
                   <p-button
-                    label="Create"
-                    icon="pi pi-user-plus"
+                    label="Back"
+                    (onClick)="toggleRegister()"
+                  ></p-button>
+                  <p-button
+                    [label]="isLoadingRegister ? 'Creating' : 'Create'"
                     (onClick)="register()"
-                    class="register-button"
                   ></p-button>
                 </div>
               </div>
+            </div>
             }
-
           </div>
         </div>
       </div>

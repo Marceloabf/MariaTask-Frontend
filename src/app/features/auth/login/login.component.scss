@@ -1,15 +1,25 @@
-.task-container{
+.main-container{
     background: #121214;
+    min-width: 16.25rem;
 }
 
 .card-header-bg{
     background: #282828;
 }
 
-.email{
-    min-width: 235px;
+.input-mask-fix{
+    min-width: 14.6875rem;
 }
 
-.register-button{
-    margin-right: 33px;
+.button-container{
+    padding-right: 0.875rem;
+}
+
+.register-button-container{
+    padding-right: 0.875rem;
+    min-width: 15.5625rem;
+}
+
+.login-container{
+    min-width: 15.5625rem;
 }

@@ -1,8 +1,9 @@
 @import "primeicons/primeicons.css";
 body{
-    height: 100vh;
-    overflow-y: hidden;
+    min-height: 100vh;
     background: linear-gradient(to bottom, #121214, #282828);
+    font-size: 1rem; 
+    line-height: 1.5; 
 }
 
 h1, p {
@@ -19,4 +20,12 @@ button.p-ripple.p-button.p-component.p-button-icon-only.p-button-raised.p-button
 
 ol.p-metergroup-label-list.p-component.p-metergroup-label-list-horizontal{
     justify-content: space-between;
+}
+
+.text-center p {
+    font-size: clamp(1rem, 4vw, 1.2rem);
+}
+
+.col-md-12.d-flex.flex-column.align-items-center.justify-content-center.gap-4{
+    padding-right: 0;
 }

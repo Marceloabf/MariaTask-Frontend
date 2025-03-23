@@ -1,13 +1,28 @@
-<div class="container mt-5">
+<div class="container py-2 teste">
   <div class="text-center mb-4">
     <h1>Task Board</h1>
-    <p class="lead">Manage Your Tasks</p>
+    <div>
+      <p class="lead">Manage Your Tasks</p>
+      <p-button
+        icon="pi pi-sign-out"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        (onClick)="logOut()"
+      />
+    </div>
   </div>
 
   <div class="table-responsive table-container p-4 rounded">
     <div class="col-12 mb-2">
       <div>
-        <p-metergroup [value]="reportsValues" [max]="totalRecords" />
+        @if(isLoadingReports){
+          <div class="col-12 d-flex justify-content-center">
+            <p-progressSpinner styleClass="spinner" animationDuration=".5" />
+          </div>
+        } @else if(!hasFilter){
+          <p-metergroup [value]="reportsValues" [max]="totalRecords" />
+        }
       </div>
       <div class="col-12 my-2 d-flex justify-content-between">
         <p-button
@@ -29,7 +44,7 @@
           [(ngModel)]="filterStatus"
           [options]="statusOptions"
           placeholder="Status"
-          (onChange)="getUserTasks()"
+          (onChange)="filterTasks()"
           >
           </p-dropdown>
         </div>
@@ -62,21 +77,27 @@
       <ng-template #body let-task>
         <tr>
           <td>{{ task.title }}</td>
-          <td>{{ task.description }}</td>
+          <td class="description-column">{{ task.description }}</td>
           <td>{{ task.dueDate | date : "dd/MM/yyyy HH:mm:ss" }}</td>
-          <td>
+          <td class="status-column">
             <p-badge
               [value]="formatStatus(task.status)"
               [severity]="getStatusSeverity(task.status)"
             >
             </p-badge>
           </td>
-          <td>
+          <td class="action-column">
+            <button
+              pButton
+              icon="pi pi-check"
+              class="p-button-rounded p-button-success me-2"
+              (click)="completeTask(task)"
+            ></button>
             <button
               pButton
               icon="pi pi-pencil"
               class="p-button-rounded p-button-info me-2"
-              (click)="setEditionDialog(task)"
+              (click)="setEdition(task)"
             ></button>
             <button
               pButton
@@ -274,5 +295,6 @@
       />
     </div>
   </p-dialog>
+  <p-toast />
 </div>
-<p-toast />
+

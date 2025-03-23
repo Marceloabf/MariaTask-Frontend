@@ -21,6 +21,8 @@ import { PublicService } from '../../../core/services/public.service';
 import { IPhrase } from '../interfaces/phrase.interface';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessagesModule } from 'primeng/messages';
+import { BadgeModule } from 'primeng/badge';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 @Component({
   selector: 'app-task-list',
   standalone: true,
@@ -39,6 +41,8 @@ import { MessagesModule } from 'primeng/messages';
     ToastModule,
     MeterGroupModule,
     MessagesModule,
+    BadgeModule,
+    OverlayBadgeModule
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './task-list.component.html',
@@ -71,9 +75,9 @@ export class TaskListComponent implements OnInit {
     { label: 'Concluído', value: 'DONE' },
   ];
   reportsValues = [
-    { label: 'Pendente', color: '#34d399', value: 0, key: 'PENDING' },
+    { label: 'Pendente', color: '#dc3545', value: 0, key: 'PENDING' },
     { label: 'Em Andamento', color: '#fbbf24', value: 0, key: 'IN_PROGRESS' },
-    { label: 'Concluído', color: '#60a5fa', value: 0, key: 'DONE' },
+    { label: 'Concluído', color: '#34d399', value: 0, key: 'DONE' },
   ];
   totalTasks: number = 0;
   quote: string = '';
@@ -295,5 +299,21 @@ export class TaskListComponent implements OnInit {
     });
   }
 
-  deleteTask(taskId: number) {}
+  getStatusSeverity(status: string): "info" | "success" | "warn" | "danger" | "secondary" | "contrast" | "help" | "primary" {
+    switch (status) {
+      case 'PENDING': return 'danger'; 
+      case 'IN_PROGRESS': return 'warn'; 
+      case 'DONE': return 'success'; 
+      default: return 'secondary'; 
+    }
+  }
+
+  formatStatus(status: string): string {
+    switch (status) {
+      case 'PENDING': return 'Pending';
+      case 'IN_PROGRESS': return 'In Progress';
+      case 'DONE': return 'Done';
+      default: return status;
+    }
+  }
 }

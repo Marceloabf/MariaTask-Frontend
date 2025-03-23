@@ -32,6 +32,7 @@ export class LoginComponent {
   }
   loginError: string = '';
   visibleDialog: boolean = false;
+  isRegister: boolean = false;
 
   constructor(private authService: AuthService, private router: Router, private messageService: MessageService) {}
 
@@ -56,7 +57,7 @@ export class LoginComponent {
   register(){
     if (!this.newUser.email || !this.newUser.password) return;
     this.authService.register(this.newUser).subscribe({
-      next: () => this.messageService.add({ severity: 'success', summary: 'Criado', detail: 'Usuário criado com sucesso' }),
+      next: () => {this.messageService.add({ severity: 'success', summary: 'Criado', detail: 'Usuário criado com sucesso' }), this.isRegister = false},
       error: (error: Error)=>{
         console.error('Erro ao cadastrar usuário:', error);
         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Ocorreu um erro ao criar usuário' })
@@ -66,6 +67,9 @@ export class LoginComponent {
 
   toggleDialog(){
     this.visibleDialog = !this.visibleDialog
-    console.log(this.visibleDialog)
+  }
+
+  toggleRegister(){
+    this.isRegister = !this.isRegister
   }
 }

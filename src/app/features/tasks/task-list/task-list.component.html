@@ -33,7 +33,12 @@
           <td>{{ task.title }}</td>
           <td>{{ task.description }}</td>
           <td>{{ task.dueDate | date : "dd/MM/yyyy HH:mm:ss" }}</td>
-          <td>{{ task.status }}</td>
+          <td> 
+            <p-badge 
+            [value]="formatStatus(task.status)" 
+            [severity]="getStatusSeverity(task.status)">
+          </p-badge>
+        </td>
           <td>
             <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info me-2" (click)="setEditionDialog(task)"></button>
             <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger" (click)="confirmDeletion(task.id, task.status)"></button>

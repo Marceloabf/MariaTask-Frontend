@@ -1,0 +1,278 @@
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <h1>Task Board</h1>
+    <p class="lead">Manage Your Tasks</p>
+  </div>
+
+  <div class="table-responsive table-container p-4 rounded">
+    <div class="col-12 mb-2">
+      <div>
+        <p-metergroup [value]="reportsValues" [max]="totalRecords" />
+      </div>
+      <div class="col-12 my-2 d-flex justify-content-between">
+        <p-button
+        icon="pi pi-plus"
+        [rounded]="true"
+        [text]="true"
+        [raised]="true"
+        (onClick)="toggleCreationDialog()"
+      />
+        <div class="d-flex gap-2">
+          <p-button
+            icon="pi pi-filter-slash"
+            [rounded]="true"
+            [text]="true"
+            [raised]="true"
+            (onClick)="clearFilters()"
+          />
+          <p-dropdown
+          [(ngModel)]="filterStatus"
+          [options]="statusOptions"
+          placeholder="Status"
+          (onChange)="getUserTasks()"
+          >
+          </p-dropdown>
+        </div>
+    </div>
+    </div>
+    <p-table
+      #taskTable
+      [value]="tasks"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [paginator]="true"
+      [rows]="rowsPerPage"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      [loading]="isLoadingTasks"
+      [scrollable]="true"
+      scrollHeight="400px"
+      [totalRecords]="totalRecords"
+      (onPage)="onPageChange($event)"
+      [first]="first"
+      [lazy]="true"
+    >
+      <ng-template #header>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-task>
+        <tr>
+          <td>{{ task.title }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.dueDate | date : "dd/MM/yyyy HH:mm:ss" }}</td>
+          <td>
+            <p-badge
+              [value]="formatStatus(task.status)"
+              [severity]="getStatusSeverity(task.status)"
+            >
+            </p-badge>
+          </td>
+          <td>
+            <button
+              pButton
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-info me-2"
+              (click)="setEditionDialog(task)"
+            ></button>
+            <button
+              pButton
+              icon="pi pi-trash"
+              class="p-button-rounded p-button-danger"
+              (click)="confirmDeletion(task.id, task.status)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+    <div class="col-12 mt-4">
+      <blockquote class="text-center">
+        {{ quote }} <br />
+        {{ "-" + author }}
+      </blockquote>
+      <p-confirmdialog />
+    </div>
+  </div>
+
+  <p-dialog
+    header="Criar atividade"
+    [modal]="true"
+    [(visible)]="visibleCreateDialog"
+    [style]="{ width: '90%', maxWidth: '35rem' }"
+  >
+    <div class="container">
+      <form #taskForm="ngForm">
+        <div class="row g-3 p-2">
+          <div class="col-12">
+            <p-floatlabel variant="on" class="w-100">
+              <input
+                pInputText
+                id="title"
+                [(ngModel)]="newTask.title"
+                autocomplete="off"
+                class="w-100"
+                name="title"
+                required
+              />
+              <label for="title">Título</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="col-12">
+            <p-floatlabel variant="on" class="w-100">
+              <textarea
+                rows="5"
+                pTextarea
+                [(ngModel)]="newTask.description"
+                class="w-100"
+                name="description"
+                required
+              ></textarea>
+              <label for="description">Descrição</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="col-6">
+            <p-floatlabel variant="on" class="w-100">
+              <p-select
+                [options]="statusOptions"
+                [(ngModel)]="newTask.status"
+                [checkmark]="true"
+                optionLabel="label"
+                optionValue="value"
+                [showClear]="true"
+                class="w-100"
+                appendTo="body"
+                name="status"
+                required
+              />
+              <label for="status">Status</label>
+            </p-floatlabel>
+          </div>
+          <div class="col-6">
+            <p-floatlabel variant="on" class="w-100">
+              <p-datepicker
+                [(ngModel)]="newTask.dueDate"
+                [showIcon]="true"
+                inputId="buttondisplay"
+                [showOnFocus]="false"
+                dateFormat="dd/mm/yy"
+                [showTime]="true"
+                [hourFormat]="'12'"
+                class="w-100"
+                appendTo="body"
+                name="dueDate"
+              />
+              <label for="dueDate">Data Limite</label>
+            </p-floatlabel>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <p-button
+        label="Cancelar"
+        severity="secondary"
+        (click)="visibleCreateDialog = false"
+      />
+      <p-button
+        [label]="isLoadingTaskCreation ? 'Salvando...' : 'Salvar'"
+        (click)="createTask()"
+      />
+    </div>
+  </p-dialog>
+
+  <p-dialog
+    header="Editar atividade"
+    [modal]="true"
+    [(visible)]="visibleEditDialog"
+    [style]="{ width: '90%', maxWidth: '35rem' }"
+  >
+    <div class="container">
+      <form #taskForm="ngForm">
+        <div class="row g-3 p-2">
+          <div class="col-12">
+            <p-floatlabel variant="on" class="w-100">
+              <input
+                pInputText
+                id="title"
+                [(ngModel)]="taskToUpdate.title"
+                autocomplete="off"
+                class="w-100"
+                name="title"
+                required
+              />
+              <label for="title">Título</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="col-12">
+            <p-floatlabel variant="on" class="w-100">
+              <textarea
+                rows="5"
+                pTextarea
+                [(ngModel)]="taskToUpdate.description"
+                class="w-100"
+                name="description"
+                required
+              ></textarea>
+              <label for="description">Descrição</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="col-6">
+            <p-floatlabel variant="on" class="w-100">
+              <p-select
+                [options]="statusOptions"
+                [(ngModel)]="taskToUpdate.status"
+                [checkmark]="true"
+                optionLabel="label"
+                optionValue="value"
+                [showClear]="true"
+                class="w-100"
+                appendTo="body"
+                name="status"
+                required
+              />
+              <label for="status">Status</label>
+            </p-floatlabel>
+          </div>
+          <div class="col-6">
+            <p-floatlabel variant="on" class="w-100">
+              <p-datepicker
+                [(ngModel)]="taskToUpdate.dueDate"
+                [showIcon]="true"
+                inputId="buttondisplay"
+                [showOnFocus]="false"
+                dateFormat="dd/mm/yy"
+                [showTime]="true"
+                [hourFormat]="'12'"
+                class="w-100"
+                appendTo="body"
+                name="dueDate"
+              />
+              <label for="dueDate">Data Limite</label>
+            </p-floatlabel>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+      <p-button
+        label="Cancelar"
+        severity="secondary"
+        (click)="visibleEditDialog = false"
+      />
+      <p-button
+        [label]="isLoadingTaskEdition ? 'Editando...' : 'Edit'"
+        (click)="editTask()"
+      />
+    </div>
+  </p-dialog>
+</div>
+<p-toast />

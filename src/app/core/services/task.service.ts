@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ITask } from '../../features/tasks/interfaces/task.interface';
 import { ITaskReports } from '../../features/tasks/interfaces/task-reports.interface';
+import { IPaginatedResponse } from '../../features/tasks/interfaces/paginated-response.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,8 @@ export class TaskService {
   
     constructor(private http: HttpClient) {}
   
-    getTasks(userId: number): Observable<ITask[]> {
-      return this.http.get<ITask[]>(this.apiUrl, {params:{userId}});
+    getTasks(params: {userId: number, page: number, limit: number, status?: string}): Observable<IPaginatedResponse<ITask[]>> {
+      return this.http.get<IPaginatedResponse<ITask[]>>(this.apiUrl, {params});
     }
 
     getTaskReports(userId: number): Observable<ITaskReports> {

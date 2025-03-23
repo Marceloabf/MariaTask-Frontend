@@ -1,4 +1,22 @@
 @import "primeicons/primeicons.css";
 body{
+    height: 100vh;
+    overflow-y: hidden;
     background: linear-gradient(to bottom, #121214, #282828);
+}
+
+h1, p {
+    color: whitesmoke !important;
+}
+
+.p-paginator.p-component{
+    border-radius: 0 0 8px 8px;
+}
+
+button.p-ripple.p-button.p-component.p-button-icon-only.p-button-raised.p-button-rounded.p-button-text{
+    background: #18181b;
+}
+
+ol.p-metergroup-label-list.p-component.p-metergroup-label-list-horizontal{
+    justify-content: space-between;
 }

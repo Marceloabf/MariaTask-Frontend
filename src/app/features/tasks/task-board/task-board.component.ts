@@ -1,28 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import 'datatables.net';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { BadgeModule } from 'primeng/badge';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { TableModule } from 'primeng/table';
-import { TextareaModule } from 'primeng/textarea';
-import { AuthService } from '../../../core/services/auth.service';
-import { TaskService } from '../../../core/services/task.service';
-import { ITask } from '../interfaces/task.interface';
-import { ToastModule } from 'primeng/toast';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { MeterGroupModule } from 'primeng/metergroup';
-import { ITaskReports } from '../interfaces/task-reports.interface';
-import { PublicService } from '../../../core/services/public.service';
-import { IPhrase } from '../interfaces/phrase.interface';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessagesModule } from 'primeng/messages';
-import { BadgeModule } from 'primeng/badge';
+import { MeterGroupModule } from 'primeng/metergroup';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
+import { SelectModule } from 'primeng/select';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { TextareaModule } from 'primeng/textarea';
+import { ToastModule } from 'primeng/toast';
+import { AuthService } from '../../../core/services/auth.service';
+import { PublicService } from '../../../core/services/public.service';
+import { TaskService } from '../../../core/services/task.service';
+import { IPhrase } from '../interfaces/phrase.interface';
+import { ITaskReports } from '../interfaces/task-reports.interface';
+import { ITask } from '../interfaces/task.interface';
 @Component({
   selector: 'app-task-list',
   standalone: true,
@@ -42,14 +43,14 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     MeterGroupModule,
     MessagesModule,
     BadgeModule,
-    OverlayBadgeModule
+    OverlayBadgeModule,
+    DropdownModule
   ],
   providers: [MessageService, ConfirmationService],
-  templateUrl: './task-list.component.html',
-  styleUrl: './task-list.component.scss',
+  templateUrl: './task-board.component.html',
+  styleUrl: './task-board.component.scss',
 })
 export class TaskListComponent implements OnInit {
-  @ViewChild('taskTable', { static: false }) table!: ElementRef;
   @ViewChild('taskForm') form!: NgForm;
   private userId: number | undefined = undefined;
 
@@ -70,22 +71,27 @@ export class TaskListComponent implements OnInit {
     dueDate: new Date(),
   };
   statusOptions = [
-    { label: 'Pendente', value: 'PENDING' },
-    { label: 'Em Andamento', value: 'IN_PROGRESS' },
-    { label: 'Concluído', value: 'DONE' },
+    { label: 'Pending', value: 'PENDING' },
+    { label: 'In Progress', value: 'IN_PROGRESS' },
+    { label: 'Done', value: 'DONE' },
   ];
   reportsValues = [
-    { label: 'Pendente', color: '#dc3545', value: 0, key: 'PENDING' },
-    { label: 'Em Andamento', color: '#fbbf24', value: 0, key: 'IN_PROGRESS' },
-    { label: 'Concluído', color: '#34d399', value: 0, key: 'DONE' },
+    { label: 'Pending', color: '#dc3545', value: 0, key: 'PENDING' },
+    { label: 'In Progress', color: '#fbbf24', value: 0, key: 'IN_PROGRESS' },
+    { label: 'Done', color: '#34d399', value: 0, key: 'DONE' },
   ];
-  totalTasks: number = 0;
   quote: string = '';
   author: string = '';
   isLoadingTasks: boolean = false;
   isLoadingTaskCreation: boolean = false;
   isLoadingTaskEdition: boolean = false;
   isLoadingTaskDeletion: boolean = false;
+  isLoadingReports: boolean = false;
+  rowsPerPage: number =  10;
+  page: number  = 1;
+  totalRecords: number = 0;
+  first: number = 1;
+  filterStatus: string = '';
   constructor(
     private confirmationService: ConfirmationService,
     private taskService: TaskService,
@@ -109,10 +115,11 @@ export class TaskListComponent implements OnInit {
     if (!this.userId) return;
     this.isLoadingTasks = true;
 
-    this.taskService.getTasks(this.userId).subscribe({
+    this.taskService.getTasks({userId: this.userId, page: this.page, limit: this.rowsPerPage, status: this.filterStatus}).subscribe({
       next: (response) => {
-        this.tasks = response ?? [];
+        this.tasks = response.data ?? [];
         this.isLoadingTasks = false;
+        this.totalRecords = response.total
       },
       error: (error: Error) => {
         console.error('Erro ao buscar tarefas do usuário:', error);
@@ -136,6 +143,11 @@ export class TaskListComponent implements OnInit {
     this.taskToUpdate = {...this.taskToUpdate, dueDate:formattedDate};
   }
 
+  clearFilters(){
+    this.filterStatus = '';
+    this.getUserTasks()
+  }
+
   createTask() {
     if (!this.form.valid){
       this.messageService.add({
@@ -157,6 +169,7 @@ export class TaskListComponent implements OnInit {
 
           this.incrementReportsStats();
           this.form.reset();
+          this.newTask.status = 'PENDING'
       },
       error: (error: Error) => {
         console.error('Erro ao criar atividade:', error);
@@ -179,7 +192,7 @@ export class TaskListComponent implements OnInit {
       ...item,
       value: item.key === this.newTask.status ? item.value + 1 : item.value
     }));
-
+    this.totalRecords +=1;
     this.reportsValues = [...updatedReports];
 
   }
@@ -189,13 +202,14 @@ export class TaskListComponent implements OnInit {
       ...item,
       value: item.key === taskStatus ? item.value - 1 : item.value
     }));
-
+    this.totalRecords -=1;
     this.reportsValues = [...updatedReports];
 
   }
 
   getTaskReports() {
     if (!this.userId) return;
+    this.isLoadingReports = true;
 
     this.taskService.getTaskReports(this.userId).subscribe({
       next: (response: ITaskReports) => {
@@ -203,7 +217,7 @@ export class TaskListComponent implements OnInit {
           ...status,
           value: response[status.key],
         }));
-        this.totalTasks = response.total;
+        this.isLoadingReports = false;
       },
       error: (error: Error) => {
         console.error('Erro ao gerar relatórios:', error);
@@ -226,6 +240,12 @@ export class TaskListComponent implements OnInit {
         console.error('Erro ao buscar frase:', error);
       },
     });
+  }
+
+  onPageChange(event: TableLazyLoadEvent){
+    this.page = event.first! / event.rows! + 1;
+    this.rowsPerPage = event.rows!
+    this.getUserTasks()
   }
 
   editTask() {

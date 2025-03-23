@@ -3,7 +3,5 @@ export interface ITask{
     title: string;
     description: string;
     status: string;
-    // createdAt: Date;
     dueDate: string;
-    // userId: number;
 }

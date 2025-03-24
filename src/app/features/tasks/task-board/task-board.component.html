@@ -17,8 +17,8 @@
     <div class="col-12 mb-2">
       <div>
         @if(isLoadingReports){
-          <div class="col-12 d-flex justify-content-center">
-            <p-progressSpinner styleClass="spinner" animationDuration=".5" />
+          <div class="col-12 d-flex justify-content-center loading-container">
+            <p-progressSpinner class="loading-container" styleClass="spinner" animationDuration=".5" />
           </div>
         } @else if(!hasFilter){
           <p-metergroup [value]="reportsValues" [max]="totalRecords" />
@@ -88,6 +88,7 @@
           </td>
           <td class="action-column">
             <button
+              *ngIf="task.status != 'DONE'"
               pButton
               icon="pi pi-check"
               class="p-button-rounded p-button-success me-2"
@@ -283,14 +284,14 @@
       </form>
     </div>
 
-    <div class="d-flex justify-content-end gap-2 mt-3">
+    <div class="d-flex justify-content-end gap-2 mt-3 buttons-container">
       <p-button
         label="Cancelar"
         severity="secondary"
         (click)="visibleEditDialog = false"
       />
       <p-button
-        [label]="isLoadingTaskEdition ? 'Editando...' : 'Edit'"
+        [label]="isLoadingTaskEdition ? 'Editing...' : 'Edit'"
         (click)="editTask()"
       />
     </div>

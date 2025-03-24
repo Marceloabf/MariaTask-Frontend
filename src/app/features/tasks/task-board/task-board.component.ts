@@ -263,7 +263,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
         this.taskService.deleteTask(taskId).subscribe({
           next: () => {
             this.messageService.add({
-              severity: 'info',
+              severity: 'success',
               summary: 'Confirmed',
               detail: 'Task deleted',
             });

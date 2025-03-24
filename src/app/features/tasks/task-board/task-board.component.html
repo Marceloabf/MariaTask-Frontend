@@ -120,7 +120,8 @@
   </div>
 
   <p-dialog
-    header="Criar atividade"
+    header="New Task"
+    class="header"
     [modal]="true"
     [(visible)]="visibleCreateDialog"
     [style]="{ width: '90%', maxWidth: '35rem' }"
@@ -139,7 +140,7 @@
                 name="title"
                 required
               />
-              <label for="title">Título</label>
+              <label for="title">Title</label>
             </p-floatlabel>
           </div>
 
@@ -153,7 +154,7 @@
                 name="description"
                 required
               ></textarea>
-              <label for="description">Descrição</label>
+              <label for="description">Description</label>
             </p-floatlabel>
           </div>
 
@@ -188,28 +189,28 @@
                 appendTo="body"
                 name="dueDate"
               />
-              <label for="dueDate">Data Limite</label>
+              <label for="dueDate">Due Date</label>
             </p-floatlabel>
           </div>
         </div>
       </form>
     </div>
 
-    <div class="d-flex justify-content-end gap-2 mt-3">
+    <div class="d-flex justify-content-end gap-2 mt-3 buttons-container">
       <p-button
-        label="Cancelar"
+        label="Cancel"
         severity="secondary"
         (click)="visibleCreateDialog = false"
       />
       <p-button
-        [label]="isLoadingTaskCreation ? 'Salvando...' : 'Salvar'"
+        [label]="isLoadingTaskCreation ? 'Saving...' : 'Save'"
         (click)="createTask()"
       />
     </div>
   </p-dialog>
 
   <p-dialog
-    header="Editar atividade"
+    header="Edit Task"
     [modal]="true"
     [(visible)]="visibleEditDialog"
     [style]="{ width: '90%', maxWidth: '35rem' }"
@@ -228,7 +229,7 @@
                 name="title"
                 required
               />
-              <label for="title">Título</label>
+              <label for="title">Title</label>
             </p-floatlabel>
           </div>
 
@@ -242,7 +243,7 @@
                 name="description"
                 required
               ></textarea>
-              <label for="description">Descrição</label>
+              <label for="description">Description</label>
             </p-floatlabel>
           </div>
 
@@ -277,7 +278,7 @@
                 appendTo="body"
                 name="dueDate"
               />
-              <label for="dueDate">Data Limite</label>
+              <label for="dueDate">Due Date</label>
             </p-floatlabel>
           </div>
         </div>
@@ -286,7 +287,7 @@
 
     <div class="d-flex justify-content-end gap-2 mt-3 buttons-container">
       <p-button
-        label="Cancelar"
+        label="Cancel"
         severity="secondary"
         (click)="visibleEditDialog = false"
       />

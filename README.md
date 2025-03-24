@@ -1,4 +1,4 @@
-MARIA TASK Frontend
+## MARIA TASK
 
 A responsive web application for task management built with Angular, featuring user authentication, task management, and a clean, intuitive interface.
 
